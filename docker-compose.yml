@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  scraper:
+    build: .
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
