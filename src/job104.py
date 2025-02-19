@@ -64,7 +64,7 @@ async def scrape_and_save():
             save_jobs(formatted_jobs)
 
         if OPENAI_API_KEY:
-            job_analysis = analyze_jobs_with_ai(jobs)
+            job_analysis = await analyze_jobs_with_ai(jobs)
             save_job_analysis(job_analysis)
 
         print("update done!")
