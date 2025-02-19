@@ -4,11 +4,14 @@ from contextlib import closing
 
 DB_PATH = "data/jobs.db" 
 
+def get_db_connection():
+    return sqlite3.connect(DB_PATH)
+
 def init_db():
     if not os.path.exists("data"):
         os.makedirs("data") 
 
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         with closing(conn.cursor()) as cursor:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS jobs (
@@ -25,9 +28,7 @@ def init_db():
         conn.commit()
     print("SQLite init done")
 
-def get_db_connection():
-    """ 取得 SQLite 資料庫連線 """
-    return sqlite3.connect(DB_PATH)
+
 
 if __name__ == "__main__":
     init_db()
