@@ -25,6 +25,14 @@ def init_db():
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS job_analysis (
+                    job_id INTEGER PRIMARY KEY,
+                    skills TEXT DEFAULT NULL,
+                    FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE
+                )
+            """)
         conn.commit()
     print("SQLite init done")
 
@@ -56,6 +64,16 @@ def save_jobs(jobs):
         conn.commit()
     print(f" {len(jobs)} jobs saved")
 
+def save_job_analysis(job_analysis):
+    """ save job analysis (avoid duplicate insertion)"""
+    with sqlite3.connect(DB_PATH) as conn:
+        with closing(conn.cursor()) as cursor:
+            cursor.executemany("""
+                INSERT OR IGNORE INTO job_analysis (job_id, skills)
+                VALUES (?, ?)
+            """, job_analysis)
+        conn.commit()
+    print(f" {len(job_analysis)} job analysis saved")
 
 if __name__ == "__main__":
     init_db()

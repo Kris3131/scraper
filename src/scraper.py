@@ -3,7 +3,7 @@ import time
 
 from database import init_db
 from job104 import scrape_and_save
-
+from analyze import analyze_jobs_with_ai
 
 def main():
     try: 

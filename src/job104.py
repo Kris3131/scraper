@@ -1,8 +1,15 @@
 import requests
 import time
-from config import API_CONFIG
-from database import save_jobs
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+from config import API_CONFIG
+from database import save_jobs, save_job_analysis
+from analyze import analyze_jobs_with_ai
 def fetch_104_jobs():
     all_jobs = []
     page = 1
@@ -50,6 +57,11 @@ def scrape_and_save():
             print(f"found {len(formatted_jobs)} jobs")
             save_jobs(formatted_jobs)
 
+        if OPENAI_API_KEY:
+            job_analysis = analyze_jobs_with_ai(jobs)
+            save_job_analysis(job_analysis)
+
         print("update done!")
+
     except Exception as e:
         print(f"update error: {str(e)}")
