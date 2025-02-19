@@ -52,6 +52,7 @@ async def scrape_and_save():
         if jobs:
             formatted_jobs = [
                 (
+                    job['jobNo'] if 'jobNo' in job else 'Not provided',
                     job['jobName'] if 'jobName' in job else 'Not provided',
                     job['custName'] if 'custName' in job else 'Not provided',
                     job['salaryLow'] if 'salaryLow' in job else 'Not provided',
@@ -61,12 +62,12 @@ async def scrape_and_save():
                 for job in jobs
             ]
             print(f"found {len(formatted_jobs)} jobs")
+            print(formatted_jobs)
             save_jobs(formatted_jobs)
 
         if OPENAI_API_KEY:
             job_analysis = await analyze_jobs_with_ai(jobs)
             save_job_analysis(job_analysis)
-
         print("update done!")
 
     except Exception as e:

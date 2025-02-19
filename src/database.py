@@ -16,6 +16,7 @@ def init_db():
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS jobs (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    job_id INTEGER UNIQUE,
                     title TEXT NOT NULL,
                     company TEXT NOT NULL,
                     salary TEXT DEFAULT 'not provided',
@@ -30,7 +31,7 @@ def init_db():
                 CREATE TABLE IF NOT EXISTS job_analysis (
                     job_id INTEGER PRIMARY KEY,
                     skills TEXT DEFAULT NULL,
-                    FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE
+                    FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE
                 )
             """)
         conn.commit()
@@ -44,19 +45,21 @@ def save_jobs(jobs):
                 try:
                     cursor.execute("""
                         INSERT OR IGNORE INTO jobs (
+                            job_id,
                             title, 
                             company, 
                             salary,
                             job_description, 
                             link
                         ) 
-                        VALUES (?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?)
                     """, (
-                        job[0],    # title
-                        job[1],    # company
-                        job[2],    # salary (使用 salaryLow)
-                        job[3],    # job_description
-                        job[4]     # link
+                        job[0],    # job_id
+                        job[1],    # title
+                        job[2],    # company
+                        job[3],    # salary (使用 salaryLow)
+                        job[4],    # job_description
+                        job[5]     # link
                     ))
                 except Exception as e:
                     print(f"Error saving job {job[0]}: {e}")
