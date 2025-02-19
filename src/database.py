@@ -28,6 +28,33 @@ def init_db():
         conn.commit()
     print("SQLite init done")
 
+def save_jobs(jobs):
+    """ save jobs (avoid duplicate insertion)"""
+    with sqlite3.connect(DB_PATH) as conn:
+        with closing(conn.cursor()) as cursor:
+            for job in jobs:
+                try:
+                    cursor.execute("""
+                        INSERT OR IGNORE INTO jobs (
+                            title, 
+                            company, 
+                            salary,
+                            job_description, 
+                            link
+                        ) 
+                        VALUES (?, ?, ?, ?, ?)
+                    """, (
+                        job[0],    # title
+                        job[1],    # company
+                        job[2],    # salary (使用 salaryLow)
+                        job[3],    # job_description
+                        job[4]     # link
+                    ))
+                except Exception as e:
+                    print(f"Error saving job {job[0]}: {e}")
+                    continue
+        conn.commit()
+    print(f" {len(jobs)} jobs saved")
 
 
 if __name__ == "__main__":
