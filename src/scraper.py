@@ -1,14 +1,13 @@
-import requests
-import time
+import asyncio
 
 from database import init_db
 from job104 import scrape_and_save
 from analyze import analyze_jobs_with_ai
 
-def main():
+async def main():
     try: 
         init_db()
-        scrape_and_save()
+        await scrape_and_save()
     except KeyboardInterrupt:
         print("KeyboardInterrupt: Exiting gracefully...")
         return
@@ -17,4 +16,4 @@ def main():
         return    
 
 if __name__ == "__main__":
-    main()            
+    asyncio.run(main())            
