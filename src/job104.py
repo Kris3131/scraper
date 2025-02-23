@@ -7,16 +7,16 @@ load_dotenv()
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-from config import API_CONFIG
+from config import config
 from database import save_jobs, save_job_analysis
 from analyze import analyze_jobs_with_ai
 
 async def fetch_page(session, page):
-    API_CONFIG['PARAMS']['page'] = page
+    config.API_CONFIG['PARAMS']['page'] = page
     try:
-        async with session.get(API_CONFIG['URL'], 
-                             headers=API_CONFIG['HEADERS'], 
-                             params=API_CONFIG['PARAMS']) as response:
+        async with session.get(config.API_CONFIG['URL'], 
+                             headers=config.API_CONFIG['HEADERS'], 
+                             params=config.API_CONFIG['PARAMS']) as response:
             if response.status != 200:
                 print(f"104 page {page} jobs fetch failed! Status code: {response.status}")
                 return []

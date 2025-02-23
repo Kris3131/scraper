@@ -2,8 +2,14 @@ version: '3.8'
 
 services:
   scraper:
-    build: .
+    build:
+      context: .
+      args:
+        ENV: ${ENV:-development}
     volumes:
       - ./data:/app/data
+      - ./config:/app/config
     env_file:
-      - .env
+      - .env.${ENV:-development}
+    environment:
+      - ENV=${ENV:-development}

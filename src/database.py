@@ -1,8 +1,10 @@
 import sqlite3
 import os
 from contextlib import closing
+from config import get_config
 
-DB_PATH = "data/jobs.db" 
+config_instance = get_config()
+DB_PATH = config_instance.DB_PATH
 
 def get_db_connection():
     return sqlite3.connect(DB_PATH)
