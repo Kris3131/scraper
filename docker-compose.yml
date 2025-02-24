@@ -5,11 +5,15 @@ services:
     build:
       context: .
       args:
-        ENV: ${ENV:-development}
+        ENV: ${ENV:-production}
     volumes:
-      - ./data:/app/data
+      - scraper_data:/app/data
       - ./config:/app/config
     env_file:
-      - .env.${ENV:-development}
+      - .env.${ENV:-production}
     environment:
-      - ENV=${ENV:-development}
+      - ENV=${ENV:-production}
+    restart: unless-stopped
+
+volumes:
+  scraper_data:
